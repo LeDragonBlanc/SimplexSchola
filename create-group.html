@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un groupe - Groupe d'étude en ligne</title>
+    <link rel="stylesheet" href="style.css"> <!-- Lien vers votre fichier CSS -->
+    <style>
+        /* Styles spécifiques pour le logo rond */
+        .logo-container {
+            display: inline-block;
+            width: 50px; /* Ajustez la taille selon vos besoins */
+            height: 50px; /* Ajustez la taille selon vos besoins */
+            border-radius: 50%; /* Pour rendre le conteneur rond */
+            overflow: hidden; /* Pour cacher le contenu qui dépasse */
+            margin-right: 10px; /* Ajustez la marge selon vos besoins */
+        }
+
+        .logo-container img {
+            display: block;
+            width: 100%; /* Pour remplir complètement le conteneur */
+            height: auto; /* Pour conserver les proportions de l'image */
+        }
+    </style>
+    <style>
+        /* Styles de base pour le formulaire */
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label, input, textarea, button {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const groupName = document.getElementById('group-name').value;
+                const description = document.getElementById('description').value;
+                const subjects = document.getElementById('subjects').value;
+
+                const formData = {
+                    groupName: groupName,
+                    description: description,
+                    subjects: subjects
+                };
+
+                fetch('create-group.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        form.reset();
+                    } else {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors de la création du groupe. Veuillez réessayer.');
+                });
+            });
+        });
+    </script>
+    <header>
+        <div class="logo-container">
+            <img src="favicon.png" alt="Votre logo">
+        </div>
+        <h1>Groupe d'étude en ligne</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="search-groups.html">Rechercher des groupes</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <center><h2>Créer un groupe d'étude</h2></center>
+            <form>
+                <p>
+                    <label for="group-name">Nom du groupe :</label>
+                    <input type="text" id="group-name" name="group-name" required>
+                </p>
+                <p>
+                    <label for="description">Description :</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </p>
+                <p>
+                    <label for="subjects">Sujets abordés :</label>
+                    <input type="text" id="subjects" name="subjects" required>
+                </p>
+                <button type="submit">Créer le groupe</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 SimplexSchola. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
